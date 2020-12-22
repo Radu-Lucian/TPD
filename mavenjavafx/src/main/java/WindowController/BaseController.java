@@ -11,9 +11,16 @@ public class BaseController {
         return type + " " + value;
     }
 
-    public void ifOperationFailedShowMessageBox(String headerMessage) {
+    public void operationFailedShowMessageBox(String headerMessage) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Warning!");
+        alert.setHeaderText(headerMessage);
+        alert.showAndWait().ifPresent(rs -> { });
+    }
+
+    public void showInformationMessage(String headerMessage) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Info!");
         alert.setHeaderText(headerMessage);
         alert.showAndWait().ifPresent(rs -> { });
     }

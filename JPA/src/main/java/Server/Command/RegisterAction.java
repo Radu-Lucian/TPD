@@ -34,7 +34,11 @@ public class RegisterAction extends ControllerBaseAction {
                 String userToken = base64Encoder.encodeToString(randomBytes);
                 String dbToken = base64Encoder.encodeToString(userToken.getBytes());
 
-                userService.addUser(new User(username, dbToken));
+                User newUser = new User();
+                newUser.setUsername(username);
+                newUser.setToken(dbToken);
+
+                userService.addUser(newUser);
 
                 if (userService.findUserByToken(dbToken) != null) {
                     this.bufferedOutputWriter.write(userToken);

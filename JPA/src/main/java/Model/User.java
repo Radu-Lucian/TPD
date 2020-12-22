@@ -8,18 +8,9 @@ import java.util.List;
 public class User {
     private static final long serialVersionUID = 1L;
 
-    public User(String username, String token) {
-        this.username = username;
-        this.token = token;
-    }
-
-    public User() {
-
-    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idusers", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "username", unique = true, nullable = false)

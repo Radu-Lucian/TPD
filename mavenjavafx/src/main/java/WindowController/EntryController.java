@@ -42,7 +42,7 @@ public class EntryController extends BaseController {
         Future<String> response = es.submit(commandWithSocket);
         try {
             if (response.get().equals("Failed")) {
-                ifOperationFailedShowMessageBox("Login Failed!");
+                operationFailedShowMessageBox("Login Failed!");
             }
             else {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/mainWindow.fxml"));
@@ -66,7 +66,6 @@ public class EntryController extends BaseController {
             stage.setTitle(ProjectConstants.APPLICATION_NAME + "- Register");
             stage.setScene(new Scene(root));
             stage.showAndWait();
-            ((Node)(event.getSource())).getScene().getWindow().hide();
         } catch (IOException e) {
             e.printStackTrace();
         }
