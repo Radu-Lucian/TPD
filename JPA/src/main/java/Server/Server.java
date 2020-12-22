@@ -15,13 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class UserServer implements Runnable {
+public class Server implements Runnable {
 
     private final ServerSocket serverSocket;
 
     private final HashMap<String, Function<Socket, ControllerAction>> controllerActions;
 
-    public UserServer(int port) throws IOException {
+    public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(250);
         controllerActions = new HashMap<String, Function<Socket, ControllerAction>>() {{
@@ -59,7 +59,6 @@ public class UserServer implements Runnable {
             } catch (SocketTimeoutException ste) {
                 // Not here
             }
-
         }
         System.out.println("Done accepting");
     }

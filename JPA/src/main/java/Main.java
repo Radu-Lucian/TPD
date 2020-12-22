@@ -1,14 +1,5 @@
-import Model.Right;
-import Model.RightType;
-import Model.Role;
-import Model.User;
-import Server.UserServer;
-import Service.UserService;
+import Server.Server;
 
-import java.security.SecureRandom;
-import java.util.Base64;
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         ExecutorService exSrv = Executors.newCachedThreadPool();
         try {
-            UserServer server = new UserServer(9001);
+            Server server = new Server(9001);
             exSrv.submit(server);
         } catch (Exception e) {
             e.printStackTrace();
