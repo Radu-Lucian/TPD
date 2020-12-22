@@ -31,33 +31,25 @@ public class UserRepository extends GenericRepository<User> {
     }
 
     public List<User> findByUsername(String name) {
+        return findBy("username", name);
+    }
+
+    public User findByToken(String token) {
+        List<User> resultList = findBy("token", token);
+        return !resultList.isEmpty() ? resultList.get(0) : null;
+    }
+
+    private List<User> findBy(String entity, String value) {
         EntityManager entityManager = getEntityManager();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
 
         Root<User> c = query.from(User.class);
         ParameterExpression<String> paramName = criteriaBuilder.parameter(String.class);
-        query.select(c).where(criteriaBuilder.equal(c.get("username"), paramName));
+        query.select(c).where(criteriaBuilder.equal(c.get(entity), paramName));
         TypedQuery<User> userTypedQuery = entityManager.createQuery(query);
-        userTypedQuery.setParameter(paramName, name);
+        userTypedQuery.setParameter(paramName, value);
 
         return userTypedQuery.getResultList();
-    }
-
-    public User findByToken(String name) {
-        EntityManager entityManager = getEntityManager();
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<User> query;
-        query = criteriaBuilder.createQuery(User.class);
-
-        Root<User> c = query.from(User.class);
-        ParameterExpression<String> paramName = criteriaBuilder.parameter(String.class);
-        query.select(c).where(criteriaBuilder.equal(c.get("token"), paramName));
-        TypedQuery<User> userTypedQuery = entityManager.createQuery(query);
-        userTypedQuery.setParameter(paramName, name);
-
-        List<User> resultList = userTypedQuery.getResultList();
-
-        return !resultList.isEmpty() ? resultList.get(0) : null;
     }
 }

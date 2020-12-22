@@ -28,9 +28,9 @@ public class Main {
 //        byte[] randomBytes = new byte[16];
 //        secureRandom.nextBytes(randomBytes);
 //
-//        String result = base64Encoder.encodeToString(randomBytes);
+//        String result = base64Encoder.encodeToString(randomBytes); // Give to the user
 //
-//        String db = base64Encoder.encodeToString(result.getBytes());
+//        String db = base64Encoder.encodeToString(result.getBytes()); // Only in data base
 //
 //        System.out.println(result);
 //        System.out.println(db);

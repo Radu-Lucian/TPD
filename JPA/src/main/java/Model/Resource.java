@@ -9,8 +9,7 @@ import java.util.Set;
 @Table(name = "resources")
 public class Resource {
 
-    public Resource(int id, byte[] file) {
-        this.id = id;
+    public Resource(byte[] file) {
         this.file = file;
     }
 
@@ -19,7 +18,8 @@ public class Resource {
     }
 
     @Id
-    @Column(name = "idresources")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idresources", unique = true, nullable = false)
     private int id;
 
     @Lob

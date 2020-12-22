@@ -4,7 +4,6 @@ import Model.User;
 import Service.UserService;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -17,16 +16,12 @@ public class LoginAction extends ControllerBaseAction {
 
     @Override
     public boolean execute() {
-
         boolean result = false;
         try {
-            BufferedWriter bufferedOutputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            BufferedReader bufferedInputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
+            this.bufferedOutputWriter.newLine();
+            this.bufferedOutputWriter.flush();
 
-            bufferedOutputWriter.write("\n");
-            bufferedOutputWriter.flush();
-
-            String token = bufferedInputReader.readLine();
+            String token = this.bufferedInputReader.readLine();
             if (token != null) {
                 Base64.Encoder base64Encoder = Base64.getUrlEncoder();
                 String databaseToken = base64Encoder.encodeToString(token.getBytes());
@@ -35,14 +30,13 @@ public class LoginAction extends ControllerBaseAction {
                 User resultedUser = userService.findUserByToken(databaseToken);
 
                 if (resultedUser != null) {
-                    bufferedOutputWriter.write("Success");
-                    bufferedOutputWriter.flush();
+                    this.bufferedOutputWriter.write(resultedUser.getUsername());
                     result = true;
                 }
                 else {
-                    bufferedOutputWriter.write("Failed");
-                    bufferedOutputWriter.flush();
+                    this.bufferedOutputWriter.write("Failed");
                 }
+                this.bufferedOutputWriter.flush();
             }
         } catch (IOException e) {
             e.printStackTrace();

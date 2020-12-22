@@ -3,6 +3,7 @@ package Server;
 import Model.User;
 import Server.Command.ControllerAction;
 import Server.Command.LoginAction;
+import Server.Command.RegisterAction;
 import Service.UserService;
 
 import java.io.*;
@@ -18,13 +19,14 @@ public class UserServer implements Runnable {
 
     private final ServerSocket serverSocket;
 
-    private HashMap<String, Function<Socket, ControllerAction>> controllerActions;
+    private final HashMap<String, Function<Socket, ControllerAction>> controllerActions;
 
     public UserServer(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(250);
         controllerActions = new HashMap<String, Function<Socket, ControllerAction>>() {{
             put("token", LoginAction::new);
+            put("register", RegisterAction::new);
         }};
     }
 
@@ -61,14 +63,4 @@ public class UserServer implements Runnable {
         }
         System.out.println("Done accepting");
     }
-
-    public static boolean isNumeric(String str) {
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch(NumberFormatException e){
-            return false;
-        }
-    }
-
 }

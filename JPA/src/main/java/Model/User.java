@@ -8,8 +8,7 @@ import java.util.List;
 public class User {
     private static final long serialVersionUID = 1L;
 
-    public User(int id, String username, String token) {
-        this.id = id;
+    public User(String username, String token) {
         this.username = username;
         this.token = token;
     }
