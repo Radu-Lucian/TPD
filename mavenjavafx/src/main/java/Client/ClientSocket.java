@@ -1,4 +1,4 @@
-package sample;
+package Client;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -22,8 +22,8 @@ public class ClientSocket implements Callable<String> {
 
     @Override
     public String call() throws Exception {
-        try {
-            Socket socket = new Socket(this.host, this.port);
+        try (Socket socket = new Socket(this.host, this.port)) {
+
             BufferedWriter bufferedOutputWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             BufferedReader bufferedInputReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8));
 
