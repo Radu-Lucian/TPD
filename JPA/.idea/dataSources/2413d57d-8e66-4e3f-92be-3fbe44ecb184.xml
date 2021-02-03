@@ -1102,25 +1102,30 @@ SELECT|sys.sys_config:null
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="331" parent="298" name="fk_users_roles_users_idx">
+    <column id="331" parent="298" name="downloaded">
+      <Position>4</Position>
+      <DataType>tinyint(1)|0s</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <index id="332" parent="298" name="fk_users_roles_users_idx">
       <ColNames>fk_users</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="332" parent="298" name="fk_users_roles_roles_idx">
+    <index id="333" parent="298" name="fk_users_roles_roles_idx">
       <ColNames>fk_roles</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="333" parent="298" name="PRIMARY">
+    <key id="334" parent="298" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>idusers_roles</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="334" parent="298" name="fk_users_roles_users">
+    <foreign-key id="335" parent="298" name="fk_users_roles_users">
       <ColNames>fk_users</ColNames>
       <RefTableName>users</RefTableName>
       <RefColNames>idusers</RefColNames>
     </foreign-key>
-    <foreign-key id="335" parent="298" name="fk_users_roles_roles">
+    <foreign-key id="336" parent="298" name="fk_users_roles_roles">
       <ColNames>fk_roles</ColNames>
       <RefTableName>roles</RefTableName>
       <RefColNames>idroles</RefColNames>

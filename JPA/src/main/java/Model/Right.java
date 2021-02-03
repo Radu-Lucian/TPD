@@ -44,7 +44,6 @@ public class Right {
         return "Right{" +
                 "id=" + id +
                 ", type=" + type +
-                ", roles=" + roles +
                 '}';
     }
 }

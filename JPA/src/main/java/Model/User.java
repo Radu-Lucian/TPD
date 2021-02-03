@@ -19,11 +19,8 @@ public class User {
     @Column(name = "token", unique = true, nullable = false)
     private String token;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "fk_users"),
-            inverseJoinColumns = @JoinColumn(name = "fk_roles"))
-    private List<Role> roles;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserRole> roles;
 
     public int getId() {
         return id;
@@ -49,11 +46,11 @@ public class User {
         this.token = token;
     }
 
-    public List<Role> getRoles() {
+    public List<UserRole> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(List<UserRole> roles) {
         this.roles = roles;
     }
 
@@ -63,7 +60,6 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", token='" + token + '\'' +
-                ", roles=" + roles +
                 '}';
     }
 }

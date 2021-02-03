@@ -22,8 +22,8 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "fk_rights"))
     private List<Right> rights;
 
-    @ManyToMany(mappedBy = "roles", cascade = CascadeType.ALL)
-    private List<User> users;
+    @OneToMany(mappedBy = "role",cascade = CascadeType.ALL)
+    private List<UserRole> users;
 
     public Resource getResource() {
         return resource;
@@ -41,12 +41,20 @@ public class Role {
         this.rights = rights;
     }
 
-    public List<User> getUsers() {
+    public List<UserRole> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(List<UserRole> users) {
         this.users = users;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override
@@ -54,8 +62,6 @@ public class Role {
         return "Role{" +
                 "id=" + id +
                 ", resource=" + resource +
-                ", rights=" + rights +
-                ", users=" + users +
                 '}';
     }
 }
