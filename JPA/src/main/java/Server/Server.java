@@ -2,6 +2,7 @@ package Server;
 
 import Model.User;
 import Server.Command.ControllerAction;
+import Server.Command.DownloadAction;
 import Server.Command.LoginAction;
 import Server.Command.RegisterAction;
 import Service.UserService;
@@ -27,6 +28,7 @@ public class Server implements Runnable {
         controllerActions = new HashMap<String, Function<Socket, ControllerAction>>() {{
             put("token", LoginAction::new);
             put("register", RegisterAction::new);
+            put("download", DownloadAction::new);
         }};
     }
 

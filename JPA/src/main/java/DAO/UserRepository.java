@@ -30,8 +30,9 @@ public class UserRepository extends GenericRepository<User> {
         return null;
     }
 
-    public List<User> findByUsername(String name) {
-        return findBy("username", name);
+    public User findByUsername(String name) {
+        List<User> resultList = findBy("username", name);
+        return !resultList.isEmpty() ? resultList.get(0) : null;
     }
 
     public User findByToken(String token) {

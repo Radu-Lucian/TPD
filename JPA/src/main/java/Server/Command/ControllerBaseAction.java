@@ -1,9 +1,13 @@
 package Server.Command;
 
+import Model.User;
+import Model.UserRole;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public abstract class ControllerBaseAction implements ControllerAction {
 
@@ -19,5 +23,20 @@ public abstract class ControllerBaseAction implements ControllerAction {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getAllFilesAvailableForUser(User user) {
+        StringBuilder userFiles = new StringBuilder();
+        userFiles.append(user.getUsername()).append(" ");
+        List<UserRole> roles = user.getRoles(); // get all the files that the user has access and has not downloaded yet
+        for (UserRole role : roles) {
+            if (!role.getDownloaded()) {
+                byte[] file = role.getRole().getResource().getFile();
+                int fileId = role.getRole().getResource().getId();
+                String fileString = new String(file, StandardCharsets.ISO_8859_1);
+                userFiles.append(fileId).append(":").append(fileString).append(" ");
+            }
+        }
+        return String.valueOf(userFiles);
     }
 }
