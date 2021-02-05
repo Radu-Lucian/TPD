@@ -1,10 +1,7 @@
 package Server;
 
 import Model.User;
-import Server.Command.ControllerAction;
-import Server.Command.DownloadAction;
-import Server.Command.LoginAction;
-import Server.Command.RegisterAction;
+import Server.Command.*;
 import Service.UserService;
 
 import java.io.*;
@@ -29,6 +26,7 @@ public class Server implements Runnable {
             put("token", LoginAction::new);
             put("register", RegisterAction::new);
             put("download", DownloadAction::new);
+            put("getusers", GetUsersAction::new);
         }};
     }
 

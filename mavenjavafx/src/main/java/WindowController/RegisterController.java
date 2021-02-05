@@ -22,7 +22,6 @@ public class RegisterController extends BaseController {
 
     @FXML
     void initialize() {
-        
     }
 
     public void onCancelButtonClick(ActionEvent event) {

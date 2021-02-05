@@ -1,11 +1,14 @@
 package WindowController;
 
 import Client.ClientSocket;
+import Utils.ProjectConstants;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -58,12 +61,39 @@ public class MainController extends BaseController {
     }
 
     public void onUploadButtonClick(ActionEvent event) {
+
         // 1. Request from server all the available users
+        ExecutorService es = Executors.newCachedThreadPool();
+        ClientSocket commandWithSocket = new ClientSocket("localhost", 9001, buildCommand("getusers", username));
+
+        Future<String> response = es.submit(commandWithSocket);
+
+        try {
+            String allUsers = response.get(); // format id:username
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/uploadFile.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle(ProjectConstants.APPLICATION_NAME + " - Upload File");
+            stage.setScene(new Scene(loader.load()));
+            UploadFileController controller = loader.getController();
+            controller.initData(username, allUsers);
+            stage.show();
+
+        } catch (InterruptedException | ExecutionException | IOException e) {
+            e.printStackTrace();
+        }
+
         // 2. Create a new window that takes as input those users
     }
 
-    public void onViewButtonClick(ActionEvent event) {
-        // 1. Take the selected item and open it in a separate text view (or smth)
+    public void onViewButtonClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/viewFile.fxml"));
+        Stage stage = new Stage();
+        stage.setTitle(ProjectConstants.APPLICATION_NAME + " - View File");
+        stage.setScene(new Scene(loader.load()));
+        ViewFileController controller = loader.getController();
+        controller.initData(files.get(fileListView.getSelectionModel().getSelectedItem()));
+        stage.show();
     }
 
     public void onDownloadButtonClick(ActionEvent event) throws IOException {
@@ -78,7 +108,6 @@ public class MainController extends BaseController {
             Path path = Paths.get(saveFileLocation.toURI());
             Files.write(path, files.get(selectedFileIdToDownload));
         }
-        // 1. Ask the user about the location, and save it there -- DONE
 
         ExecutorService es = Executors.newCachedThreadPool();
         ClientSocket commandWithSocket = new ClientSocket("localhost", 9001, buildCommand(buildCommand("download", username), selectedFileIdToDownload));
@@ -90,8 +119,6 @@ public class MainController extends BaseController {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
-        // 2. After the file has been saved, do another request to the server in which the file shall be marked as downloaded! -- DONE
     }
 
     private void interpretResponseFromServer(String response) {

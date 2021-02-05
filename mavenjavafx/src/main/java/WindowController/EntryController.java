@@ -30,12 +30,14 @@ public class EntryController extends BaseController {
 
     @FXML
     void initialize() {
-
     }
 
     @FXML
     private void onLoginButtonClick(ActionEvent event) throws IOException {
         String token = (String) tokenField.getText();
+
+        if (token.isEmpty())
+            return;
 
         ExecutorService es = Executors.newCachedThreadPool();
         ClientSocket commandWithSocket = new ClientSocket("localhost", 9001, buildCommand("token", token));
