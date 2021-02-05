@@ -45,6 +45,14 @@ public class Resource {
         this.roles = roles;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Resource{" +

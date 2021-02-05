@@ -57,8 +57,9 @@ public class LoginAction extends ControllerBaseAction {
         for (UserRole role : roles) {
             if (!role.getDownloaded()) {
                 byte[] file = role.getRole().getResource().getFile();
+                int fileId = role.getRole().getResource().getId();
                 String fileString = new String(file, StandardCharsets.ISO_8859_1);
-                userFiles.append(fileString).append(" ");
+                userFiles.append(fileId).append(":").append(fileString).append(" ");
             }
         }
         return String.valueOf(userFiles);
