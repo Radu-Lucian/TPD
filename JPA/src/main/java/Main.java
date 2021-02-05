@@ -11,15 +11,6 @@ import java.util.concurrent.Executors;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-
-        UserService userService = new UserService();
-        User user = userService.findUser(3);
-        List<UserRole> roles = user.getRoles();
-        for (UserRole item :
-                roles) {
-            System.out.println(item);
-        }
-
         ExecutorService exSrv = Executors.newCachedThreadPool();
         try {
             Server server = new Server(9001);

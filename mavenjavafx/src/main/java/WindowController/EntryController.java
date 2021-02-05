@@ -2,6 +2,7 @@ package WindowController;
 
 import Client.ClientSocket;
 import Utils.ProjectConstants;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,12 +48,14 @@ public class EntryController extends BaseController {
             else {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/mainWindow.fxml"));
                 Stage stage = new Stage();
-                stage.setTitle(ProjectConstants.APPLICATION_NAME + "- Main Control");
+                stage.setTitle(ProjectConstants.APPLICATION_NAME + " - Main Control");
                 stage.setScene(new Scene(loader.load()));
                 MainController controller = loader.getController();
                 controller.initData(response.get());
                 stage.show();
                 ((Node)(event.getSource())).getScene().getWindow().hide();
+//                Stage stage1 = (Stage) loginButton.getScene().getWindow();
+//                stage1.close();
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -63,7 +66,7 @@ public class EntryController extends BaseController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/view/register.fxml"));
             Stage stage = new Stage();
-            stage.setTitle(ProjectConstants.APPLICATION_NAME + "- Register");
+            stage.setTitle(ProjectConstants.APPLICATION_NAME + " - Register");
             stage.setScene(new Scene(root));
             stage.showAndWait();
         } catch (IOException e) {

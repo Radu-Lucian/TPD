@@ -1091,6 +1091,7 @@ SELECT|sys.sys_config:null
       <Position>1</Position>
       <DataType>int|0s</DataType>
       <NotNull>1</NotNull>
+      <SequenceIdentity>null</SequenceIdentity>
     </column>
     <column id="329" parent="298" name="fk_users">
       <Position>2</Position>

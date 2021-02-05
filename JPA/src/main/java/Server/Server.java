@@ -53,9 +53,6 @@ public class Server implements Runnable {
                 Function<Socket, ControllerAction> socketControllerActionFunction = this.controllerActions.get(input);
                 ControllerAction controllerAction = socketControllerActionFunction.apply(socket);
                 controllerAction.execute();
-
-                bufferedOutputWriter.newLine();
-                bufferedOutputWriter.flush();
             } catch (SocketTimeoutException ste) {
                 // Not here
             }
