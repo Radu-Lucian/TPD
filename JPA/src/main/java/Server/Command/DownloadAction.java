@@ -6,6 +6,7 @@ import Service.UserRoleService;
 import Service.UserService;
 
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -45,7 +46,7 @@ public class DownloadAction extends ControllerBaseAction{
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println(e.getStackTrace());
+            System.out.println(Arrays.toString(e.getStackTrace()));
         }
         return result.get();
     }

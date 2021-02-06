@@ -15,6 +15,19 @@ public class UserRoleRepository extends GenericRepository<UserRole> {
         this.factory = entityManagerFactory;
     }
 
+    public void create(UserRole entity){
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.merge(entity);
+            entityManager.getTransaction().commit();
+        } catch (RuntimeException e) {
+            entityManager.getTransaction().rollback();
+        } finally {
+            entityManager.close();
+        }
+    }
+
     @Override
     public EntityManager getEntityManager() {
         try {

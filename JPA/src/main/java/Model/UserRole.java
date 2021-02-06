@@ -26,10 +26,17 @@ public class UserRole {
     public UserRole() {
     }
 
-    public UserRole(UserRoleId id, User user, Role role) {
-        this.id = id;
+    public UserRole(User user, Role role) {
+        this.id = new UserRoleId(user.getId(), role.getId());
         this.user = user;
         this.role = role;
+    }
+
+    public UserRole(User user, Role role, Boolean downloaded) {
+        this.id = new UserRoleId(user.getId(), role.getId());
+        this.user = user;
+        this.role = role;
+        this.downloaded = downloaded;
     }
 
     public UserRoleId getId() {

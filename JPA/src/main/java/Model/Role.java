@@ -10,9 +10,9 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idroles", unique = true, nullable = false)
-    private Long id;
+    private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "fk_resource")
     private Resource resource;
 
@@ -22,8 +22,15 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "fk_rights"))
     private List<Right> rights;
 
-    @OneToMany(mappedBy = "role",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "role",cascade = CascadeType.MERGE)
     private List<UserRole> users;
+
+    public Role() {
+    }
+
+    public Role(Resource resource) {
+        this.resource = resource;
+    }
 
     public Resource getResource() {
         return resource;
@@ -49,11 +56,11 @@ public class Role {
         this.users = users;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

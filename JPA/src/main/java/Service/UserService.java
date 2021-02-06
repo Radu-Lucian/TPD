@@ -48,4 +48,8 @@ public class UserService {
     public List<User> findAll() {
         return userDao.findAll();
     }
+
+    public User findUserById(int id) {
+        return userDao.find(id);
+    }
 }

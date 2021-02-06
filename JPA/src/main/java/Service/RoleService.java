@@ -1,6 +1,7 @@
 package Service;
 
 import DAO.RoleRepository;
+import Model.Role;
 
 import javax.persistence.Persistence;
 
@@ -16,4 +17,7 @@ public class RoleService {
         }
     }
 
+    public void addNewRole(Role role) {
+        roleDao.create(role);
+    }
 }

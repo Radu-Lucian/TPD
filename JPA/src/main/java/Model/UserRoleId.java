@@ -9,32 +9,32 @@ import java.util.Objects;
 public class UserRoleId implements Serializable {
 
     @Column(name = "fk_users")
-    private Long userId;
+    private int userId;
 
     @Column(name = "fk_roles")
-    private Long roleId;
+    private int roleId;
 
     public UserRoleId() {
     }
 
-    public UserRoleId(Long userId, Long roleId) {
+    public UserRoleId(int userId, int roleId) {
         this.userId = userId;
         this.roleId = roleId;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public Long getRoleId() {
+    public int getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Long roleId) {
+    public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
 

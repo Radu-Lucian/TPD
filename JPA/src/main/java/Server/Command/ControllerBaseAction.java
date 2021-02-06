@@ -39,4 +39,9 @@ public abstract class ControllerBaseAction implements ControllerAction {
         }
         return String.valueOf(userFiles);
     }
+
+    public void respondClientOk() throws IOException {
+        this.bufferedOutputWriter.newLine();
+        this.bufferedOutputWriter.flush();
+    }
 }

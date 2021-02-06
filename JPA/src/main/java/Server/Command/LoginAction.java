@@ -4,6 +4,7 @@ import Model.User;
 import Service.UserService;
 
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -41,7 +42,7 @@ public class LoginAction extends ControllerBaseAction {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            System.out.println(e.getStackTrace());
+            System.out.println(Arrays.toString(e.getStackTrace()));
         }
         return result.get();
     }
