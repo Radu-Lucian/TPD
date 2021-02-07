@@ -24,7 +24,7 @@ public class UploadAction extends ControllerBaseAction {
             String fileToUpload = this.bufferedInputReader.readLine();
             if (fileToUpload != null) {
                 Resource resource = addFileToDataBase(fileToUpload);
-                Role role = addRoleToDataBase(resource);
+//                Role role = addRoleToDataBase(resource);
                 respondClientOk();
 
                 String uploadingUserString = this.bufferedInputReader.readLine();
@@ -37,7 +37,7 @@ public class UploadAction extends ControllerBaseAction {
 
                 if ((usersWithFileAccess != null) && (uploadingUser != null)) {
                     String allUsersThatNeedAccessToFile = usersWithFileAccess + uploadingUser.getId();
-                    giveAccessToUsers(allUsersThatNeedAccessToFile, resource, role);
+                    giveAccessToUsers(allUsersThatNeedAccessToFile, resource);
 
                     result.set(true);
                     this.bufferedOutputWriter.write("Success");
@@ -75,17 +75,20 @@ public class UploadAction extends ControllerBaseAction {
         return resourceToAdd;
     }
 
-    private void giveAccessToUsers(String allUsersThatNeedAccessToFile, Resource resource, Role role) {
+    private void giveAccessToUsers(String allUsersThatNeedAccessToFile, Resource resource) {
         UserRoleService userRoleService = new UserRoleService();
         UserService userService = new UserService();
         RightService rightService = new RightService();
         RoleService roleService = new RoleService();
-        ResourceService resourceService = new ResourceService();
 
         String[] usersToGiveAccess = allUsersThatNeedAccessToFile.split(":");
         for (String userId :
                 usersToGiveAccess) {
             User user = userService.findUserById(Integer.parseInt(userId));
+
+            Role role = new Role(resource);
+            roleService.addNewRole(new Role(resource));
+
             UserRole userRole = new UserRole(user, role, false);
 
             Right right = rightService.findById(1);
@@ -97,7 +100,6 @@ public class UploadAction extends ControllerBaseAction {
             right.getRoles().add(role);
 
             roleService.updateRole(role);
-//            userService.updateUser(user);
             userRoleService.addNewUserRole(userRole);
         }
 
