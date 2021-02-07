@@ -19,7 +19,7 @@ public class User {
     @Column(name = "token", unique = true, nullable = false)
     private String token;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<UserRole> roles;
 
     public int getId() {
@@ -48,6 +48,10 @@ public class User {
 
     public List<UserRole> getRoles() {
         return roles;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.roles.add(userRole);
     }
 
     public void setRoles(List<UserRole> roles) {

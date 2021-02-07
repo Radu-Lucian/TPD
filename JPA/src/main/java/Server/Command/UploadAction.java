@@ -1,10 +1,7 @@
 package Server.Command;
 
 import Model.*;
-import Service.ResourceService;
-import Service.RoleService;
-import Service.UserRoleService;
-import Service.UserService;
+import Service.*;
 
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -81,12 +78,26 @@ public class UploadAction extends ControllerBaseAction {
     private void giveAccessToUsers(String allUsersThatNeedAccessToFile, Resource resource, Role role) {
         UserRoleService userRoleService = new UserRoleService();
         UserService userService = new UserService();
+        RightService rightService = new RightService();
+        RoleService roleService = new RoleService();
+        ResourceService resourceService = new ResourceService();
 
         String[] usersToGiveAccess = allUsersThatNeedAccessToFile.split(":");
         for (String userId :
                 usersToGiveAccess) {
             User user = userService.findUserById(Integer.parseInt(userId));
             UserRole userRole = new UserRole(user, role, false);
+
+            Right right = rightService.findById(1);
+
+            user.getRoles().add(userRole);
+            resource.getRoles().add(role);
+            role.getUsers().add(userRole);
+            role.getRights().add(right);
+            right.getRoles().add(role);
+
+            roleService.updateRole(role);
+//            userService.updateUser(user);
             userRoleService.addNewUserRole(userRole);
         }
 

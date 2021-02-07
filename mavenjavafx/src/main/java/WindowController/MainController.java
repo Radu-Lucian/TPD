@@ -107,17 +107,17 @@ public class MainController extends BaseController {
         if (saveFileLocation != null) {
             Path path = Paths.get(saveFileLocation.toURI());
             Files.write(path, files.get(selectedFileIdToDownload));
-        }
 
-        ExecutorService es = Executors.newCachedThreadPool();
-        ClientSocket commandWithSocket = new ClientSocket("localhost", 9001, buildCommand(buildCommand("download", username), selectedFileIdToDownload));
+            ExecutorService es = Executors.newCachedThreadPool();
+            ClientSocket commandWithSocket = new ClientSocket("localhost", 9001, buildCommand(buildCommand("download", username), selectedFileIdToDownload));
 
-        Future<String> response = es.submit(commandWithSocket);
+            Future<String> response = es.submit(commandWithSocket);
 
-        try {
-            interpretResponseFromServer(response.get());
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
+            try {
+                interpretResponseFromServer(response.get());
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
         }
     }
 

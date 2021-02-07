@@ -1,6 +1,7 @@
 package Model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class Resource {
     private byte[] file;
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     public byte[] getFile() {
         return file;

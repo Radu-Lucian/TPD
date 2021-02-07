@@ -1,6 +1,7 @@
 package Service;
 
 import DAO.RightRepository;
+import Model.Right;
 
 import javax.persistence.Persistence;
 
@@ -14,5 +15,9 @@ public class RightService {
         }catch (Exception ex){
             System.out.println("error creating the user repository");
         }
+    }
+
+    public Right findById(int id) {
+        return rightDao.find(id);
     }
 }

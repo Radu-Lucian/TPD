@@ -1,6 +1,7 @@
 package Model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,10 +21,10 @@ public class Role {
     @JoinTable(name = "roles_rights",
             joinColumns = @JoinColumn(name = "fk_roles"),
             inverseJoinColumns = @JoinColumn(name = "fk_rights"))
-    private List<Right> rights;
+    private List<Right> rights = new ArrayList<>();
 
-    @OneToMany(mappedBy = "role",cascade = CascadeType.MERGE)
-    private List<UserRole> users;
+    @OneToMany(mappedBy = "role",cascade = CascadeType.ALL)
+    private List<UserRole> users = new ArrayList<>();
 
     public Role() {
     }
@@ -54,6 +55,10 @@ public class Role {
 
     public void setUsers(List<UserRole> users) {
         this.users = users;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        users.add(userRole);
     }
 
     public int getId() {

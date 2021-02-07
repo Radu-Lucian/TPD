@@ -1,6 +1,7 @@
 package Model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ public class Right {
     private RightType type;
 
     @ManyToMany(mappedBy = "rights", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     public RightType getType() {
         return type;

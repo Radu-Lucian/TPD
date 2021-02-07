@@ -20,4 +20,8 @@ public class RoleService {
     public void addNewRole(Role role) {
         roleDao.create(role);
     }
+
+    public void updateRole(Role role) {
+        roleDao.update(role);
+    }
 }
