@@ -105,16 +105,32 @@ public class MainController extends BaseController {
 
         File saveFileLocation = fileChooser.showSaveDialog((Stage) downloadButton.getScene().getWindow());
         if (saveFileLocation != null) {
-            Path path = Paths.get(saveFileLocation.toURI());
-            Files.write(path, files.get(selectedFileIdToDownload));
 
-            ExecutorService es = Executors.newCachedThreadPool();
-            ClientSocket commandWithSocket = new ClientSocket("localhost", 9001, buildCommand(buildCommand("download", username), selectedFileIdToDownload));
+            ExecutorService downloadRightExecutorService = Executors.newCachedThreadPool();
+            ClientSocket downloadRightCommand = new ClientSocket("localhost", 9001, buildCommand(buildCommand("downloadRight", username), selectedFileIdToDownload));
 
-            Future<String> response = es.submit(commandWithSocket);
+            Future<String> downloadRightResponse = downloadRightExecutorService.submit(downloadRightCommand);
 
             try {
-                interpretResponseFromServer(response.get());
+                if (downloadRightResponse.get().equals("Success")) {
+
+                    Path path = Paths.get(saveFileLocation.toURI());
+                    Files.write(path, files.get(selectedFileIdToDownload));
+
+                    ExecutorService es = Executors.newCachedThreadPool();
+                    ClientSocket commandWithSocket = new ClientSocket("localhost", 9001, buildCommand(buildCommand("download", username), selectedFileIdToDownload));
+
+                    Future<String> response = es.submit(commandWithSocket);
+
+                    try {
+                        interpretResponseFromServer(response.get());
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    showInformationMessage("No right to download!");
+                }
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
