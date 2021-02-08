@@ -1,6 +1,7 @@
 package WindowController;
 
 import Client.ClientSocket;
+import Utils.Member;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -9,10 +10,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -40,7 +40,7 @@ public class UploadFileController extends BaseController {
     public Label fileStatusLabel;
 
     @FXML
-    public ListView<String> usersListView = new ListView<>();
+    public TableView<Member> usersTableView = new TableView<>();
 
     private String username;
 
@@ -53,20 +53,40 @@ public class UploadFileController extends BaseController {
         BooleanBinding textFieldValid = Bindings.createBooleanBinding(() -> {
             return !fileStatusLabel.getText().equals("not loaded");
         }, fileStatusLabel.textProperty());
-        usersListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        uploadButton.disableProperty().bind(Bindings.isEmpty(usersListView.getSelectionModel().getSelectedItems()).or(textFieldValid.not())); // find a way to restrict it only after file was loaded
+        usersTableView.setEditable(true);
+        usersTableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        uploadButton.disableProperty().bind(Bindings.isEmpty(usersTableView.getSelectionModel().getSelectedItems()).or(textFieldValid.not())); // find a way to restrict it only after file was loaded
     }
 
     public void initData(String username, String allUsers) {
         String[] responses = allUsers.split("\\s+");
+        ArrayList<Member> membersToPopulate = new ArrayList<>();
 
         this.username = username;
         for (String user : responses) {
             String[] idAndUsername = user.split(":");
             users.put(idAndUsername[1], idAndUsername[0]);
+            membersToPopulate.add(new Member(idAndUsername[1], true));
         }
-        ObservableList<String> itemsForDisplay = FXCollections.observableArrayList(users.keySet());
-        usersListView.setItems(itemsForDisplay);
+        ObservableList<Member> itemsForDisplay = FXCollections.observableArrayList(membersToPopulate);
+
+        usersTableView.setItems(itemsForDisplay);
+
+        usersTableView.getColumns().clear();
+
+        TableColumn<Member,String> c1 = new TableColumn<>("Username");
+        c1.setCellValueFactory(new PropertyValueFactory<>("name"));
+        usersTableView.getColumns().add(c1);
+
+        TableColumn<Member,Boolean> c2 = new TableColumn<>("Download Right");
+        c2.setCellFactory(column -> new CheckBoxTableCell());
+        c2.setCellValueFactory(cellData -> {
+            Member cellValue = cellData.getValue();
+            BooleanProperty property = cellValue.checkProperty();
+            property.addListener((observable, oldValue, newValue) -> cellValue.setCheck(newValue));
+            return property;
+        });
+        usersTableView.getColumns().add(c2);
     }
 
     public void onSelectFileButtonClick(ActionEvent event) throws IOException {
@@ -84,15 +104,18 @@ public class UploadFileController extends BaseController {
     }
 
     public void onUploadButtonClick(ActionEvent event) {
-        ObservableList<String> selectedUsers = usersListView.getSelectionModel().getSelectedItems();
+        ObservableList<Member> selectedUsers = usersTableView.getSelectionModel().getSelectedItems();
 
         StringBuilder commandString = new StringBuilder();
         commandString.append(fileToUpload).append(" ").append(username).append(" ");
         if (!selectedUsers.isEmpty()) {
-            for (String selectedUser :
+            for (Member selectedUser :
                     selectedUsers) {
-                String userId = users.get(selectedUser);
-                commandString.append(userId).append(":");
+                String userId = users.get(selectedUser.nameProperty().get());
+                if (selectedUser.checkProperty().get())
+                    commandString.append(userId).append(",").append("A").append(":"); // all rights
+                else
+                    commandString.append(userId).append(",").append("V").append(":"); // only view right
             }
         }
         else {

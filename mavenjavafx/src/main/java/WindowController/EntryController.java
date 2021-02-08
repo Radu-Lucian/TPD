@@ -56,8 +56,6 @@ public class EntryController extends BaseController {
                 controller.initData(response.get());
                 stage.show();
                 ((Node)(event.getSource())).getScene().getWindow().hide();
-//                Stage stage1 = (Stage) loginButton.getScene().getWindow();
-//                stage1.close();
             }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();

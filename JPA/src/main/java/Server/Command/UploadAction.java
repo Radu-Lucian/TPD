@@ -5,6 +5,7 @@ import Service.*;
 
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -24,7 +25,6 @@ public class UploadAction extends ControllerBaseAction {
             String fileToUpload = this.bufferedInputReader.readLine();
             if (fileToUpload != null) {
                 Resource resource = addFileToDataBase(fileToUpload);
-//                Role role = addRoleToDataBase(resource);
                 respondClientOk();
 
                 String uploadingUserString = this.bufferedInputReader.readLine();
@@ -36,7 +36,7 @@ public class UploadAction extends ControllerBaseAction {
                 String usersWithFileAccess = this.bufferedInputReader.readLine();
 
                 if ((usersWithFileAccess != null) && (uploadingUser != null)) {
-                    String allUsersThatNeedAccessToFile = usersWithFileAccess + uploadingUser.getId();
+                    String allUsersThatNeedAccessToFile = usersWithFileAccess + uploadingUser.getId() + ",A";
                     giveAccessToUsers(allUsersThatNeedAccessToFile, resource);
 
                     result.set(true);
@@ -82,22 +82,36 @@ public class UploadAction extends ControllerBaseAction {
         RoleService roleService = new RoleService();
 
         String[] usersToGiveAccess = allUsersThatNeedAccessToFile.split(":");
-        for (String userId :
+        for (String userIdAndRightString :
                 usersToGiveAccess) {
-            User user = userService.findUserById(Integer.parseInt(userId));
+            String[] userIdAndRight = userIdAndRightString.split(",");
+            User user = userService.findUserById(Integer.parseInt(userIdAndRight[0]));
 
             Role role = new Role(resource);
             roleService.addNewRole(new Role(resource));
 
             UserRole userRole = new UserRole(user, role, false);
 
-            Right right = rightService.findById(1);
-
+            ArrayList<Right> rights = new ArrayList<>();
+            if (userIdAndRight[1].equals("A")) {
+                rights.add(rightService.findById(2));
+            }
+            else {
+                rights.add(rightService.findById(1));
+            }
             user.getRoles().add(userRole);
             resource.getRoles().add(role);
             role.getUsers().add(userRole);
-            role.getRights().add(right);
-            right.getRoles().add(role);
+
+            for (Right userRight:
+                 rights) {
+                role.getRights().add(userRight);
+            }
+
+            for (Right userRight:
+                    rights) {
+                userRight.getRoles().add(role);
+            }
 
             roleService.updateRole(role);
             userRoleService.addNewUserRole(userRole);
