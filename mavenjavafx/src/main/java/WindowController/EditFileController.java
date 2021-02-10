@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -56,8 +57,9 @@ public class EditFileController extends BaseController {
 
     private void closeWindowEvent(WindowEvent event) {
         byte[] textByte = textArea.getText().getBytes();
+        Base64.Encoder base64Encoder = Base64.getUrlEncoder();
 
-        String fileToUpload = new String(textByte, StandardCharsets.ISO_8859_1);
+        String fileToUpload = new String(base64Encoder.encode(textByte), StandardCharsets.ISO_8859_1);
 
         ExecutorService es = Executors.newCachedThreadPool();
         ClientSocket commandWithSocket = new ClientSocket("localhost", 9001, buildCommand(buildCommand("edit", fileId), fileToUpload));

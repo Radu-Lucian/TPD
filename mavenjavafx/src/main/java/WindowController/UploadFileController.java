@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -39,6 +40,9 @@ public class UploadFileController extends BaseController {
 
     @FXML
     public TableView<Member> usersTableView = new TableView<>();
+
+    @FXML
+    public ComboBox<String> algorithmDropBox = new ComboBox<>();
 
     private String username;
 
@@ -98,6 +102,11 @@ public class UploadFileController extends BaseController {
         });
         usersTableView.getColumns().add(c3);
 
+        algorithmDropBox.setItems(FXCollections.observableArrayList(
+                new String("Cypher"),
+                new String("Base64")
+        ));
+
     }
 
     public void onSelectFileButtonClick(ActionEvent event) throws IOException {
@@ -108,7 +117,9 @@ public class UploadFileController extends BaseController {
         File fileToUploadFile = fileChooser.showOpenDialog((Stage) selectFileButton.getScene().getWindow());
         if (fileToUploadFile != null) {
             byte[] byteFile = Files.readAllBytes(fileToUploadFile.toPath());
-            fileToUpload = new String(byteFile, StandardCharsets.ISO_8859_1);
+            Base64.Encoder base64Encoder = Base64.getUrlEncoder();
+
+            fileToUpload = new String(base64Encoder.encode(byteFile), StandardCharsets.ISO_8859_1);
 
             fileStatusLabel.setText(fileToUploadFile.getName() + " loaded!");
         }

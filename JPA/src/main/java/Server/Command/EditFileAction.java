@@ -49,8 +49,7 @@ public class EditFileAction extends ControllerBaseAction {
     private void editFile(Resource resourceToUpdate, String fileToEdit) {
         ResourceService resourceService = new ResourceService();
 
-        Base64.Encoder base64Encoder = Base64.getUrlEncoder();
-        byte[] result = base64Encoder.encode(fileToEdit.getBytes(StandardCharsets.ISO_8859_1));
+        byte[] result = fileToEdit.getBytes(StandardCharsets.ISO_8859_1);
 
         resourceToUpdate.setFile(result);
         resourceService.updateFile(resourceToUpdate);

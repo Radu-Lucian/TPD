@@ -64,9 +64,7 @@ public class UploadAction extends ControllerBaseAction {
     }
 
     private Resource addFileToDataBase(String fileToUpload) {
-        Base64.Encoder base64Encoder = Base64.getUrlEncoder();
-
-        byte[] result = base64Encoder.encode(fileToUpload.getBytes(StandardCharsets.ISO_8859_1));
+        byte[] result = fileToUpload.getBytes(StandardCharsets.ISO_8859_1);
 
         ResourceService service = new ResourceService();
         Resource resourceToAdd = new Resource(result);
