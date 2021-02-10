@@ -29,6 +29,8 @@ public class Server implements Runnable {
             put("getusers", GetUsersAction::new);
             put("upload", UploadAction::new);
             put("downloadRight", DownloadRightAction::new);
+            put("edit", EditFileAction::new);
+            put("refresh", RefreshAction::new);
         }};
     }
 

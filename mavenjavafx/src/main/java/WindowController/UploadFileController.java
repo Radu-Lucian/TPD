@@ -5,7 +5,6 @@ import Utils.Member;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,7 +20,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -66,7 +64,7 @@ public class UploadFileController extends BaseController {
         for (String user : responses) {
             String[] idAndUsername = user.split(":");
             users.put(idAndUsername[1], idAndUsername[0]);
-            membersToPopulate.add(new Member(idAndUsername[1], true));
+            membersToPopulate.add(new Member(idAndUsername[1], true, true));
         }
         ObservableList<Member> itemsForDisplay = FXCollections.observableArrayList(membersToPopulate);
 
@@ -82,11 +80,24 @@ public class UploadFileController extends BaseController {
         c2.setCellFactory(column -> new CheckBoxTableCell());
         c2.setCellValueFactory(cellData -> {
             Member cellValue = cellData.getValue();
-            BooleanProperty property = cellValue.checkProperty();
-            property.addListener((observable, oldValue, newValue) -> cellValue.setCheck(newValue));
+            BooleanProperty property = cellValue.checkPropertyDownload();
+            property.addListener((observable, oldValue, newValue) -> cellValue.setDownloadCheck(newValue));
             return property;
         });
         usersTableView.getColumns().add(c2);
+
+        TableColumn<Member,Boolean> c3 = new TableColumn<>("Update Right");
+        c3.setCellFactory(column -> new CheckBoxTableCell());
+        c3.setCellValueFactory(cellData -> {
+            Member cellValue = cellData.getValue();
+            BooleanProperty property = cellValue.checkPropertyUpdate();
+            property.addListener((observable, oldValue, newValue) -> {
+                cellValue.setUpdateCheck(newValue);
+            });
+            return property;
+        });
+        usersTableView.getColumns().add(c3);
+
     }
 
     public void onSelectFileButtonClick(ActionEvent event) throws IOException {
@@ -112,10 +123,13 @@ public class UploadFileController extends BaseController {
             for (Member selectedUser :
                     selectedUsers) {
                 String userId = users.get(selectedUser.nameProperty().get());
-                if (selectedUser.checkProperty().get())
-                    commandString.append(userId).append(",").append("A").append(":"); // all rights
-                else
-                    commandString.append(userId).append(",").append("V").append(":"); // only view right
+                commandString.append(userId).append(",");
+                if (selectedUser.isDownloadCheck())
+                    commandString.append("D").append("'"); // download right
+                if (selectedUser.isUpdateCheck())
+                    commandString.append("U").append("'"); // update right
+                commandString.append("V");                 // view right
+                commandString.append(":");
             }
         }
         else {

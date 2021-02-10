@@ -36,7 +36,7 @@ public class UploadAction extends ControllerBaseAction {
                 String usersWithFileAccess = this.bufferedInputReader.readLine();
 
                 if ((usersWithFileAccess != null) && (uploadingUser != null)) {
-                    String allUsersThatNeedAccessToFile = usersWithFileAccess + uploadingUser.getId() + ",A";
+                    String allUsersThatNeedAccessToFile = usersWithFileAccess + uploadingUser.getId() + ",V'D'U";
                     giveAccessToUsers(allUsersThatNeedAccessToFile, resource);
 
                     result.set(true);
@@ -87,18 +87,28 @@ public class UploadAction extends ControllerBaseAction {
             String[] userIdAndRight = userIdAndRightString.split(",");
             User user = userService.findUserById(Integer.parseInt(userIdAndRight[0]));
 
+            String[] userRights = userIdAndRight[1].split("'");
+
             Role role = new Role(resource);
             roleService.addNewRole(new Role(resource));
 
             UserRole userRole = new UserRole(user, role, false);
 
             ArrayList<Right> rights = new ArrayList<>();
-            if (userIdAndRight[1].equals("A")) {
-                rights.add(rightService.findById(2));
+
+            for (String rightUserFromString :
+                    userRights) {
+                if (rightUserFromString.equals("D")) {
+                    rights.add(rightService.findById(2));
+                }
+                if (rightUserFromString.equals("U")) {
+                    rights.add(rightService.findById(3));
+                }
+                if (rightUserFromString.equals("V")) {
+                    rights.add(rightService.findById(1));
+                }
             }
-            else {
-                rights.add(rightService.findById(1));
-            }
+
             user.getRoles().add(userRole);
             resource.getRoles().add(role);
             role.getUsers().add(userRole);

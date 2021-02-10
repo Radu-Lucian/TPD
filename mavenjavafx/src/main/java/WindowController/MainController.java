@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -44,6 +45,9 @@ public class MainController extends BaseController {
     public Button viewButton;
 
     @FXML
+    public Button editButton;
+
+    @FXML
     public ListView<String> fileListView = new ListView<>();
 
     private String username;
@@ -54,6 +58,7 @@ public class MainController extends BaseController {
     void initialize() {
         downloadButton.disableProperty().bind(Bindings.isEmpty(fileListView.getSelectionModel().getSelectedItems()));
         viewButton.disableProperty().bind(Bindings.isEmpty(fileListView.getSelectionModel().getSelectedItems()));
+        editButton.disableProperty().bind(Bindings.isEmpty(fileListView.getSelectionModel().getSelectedItems()));
     }
 
     void initData(String response) {
@@ -83,6 +88,7 @@ public class MainController extends BaseController {
             e.printStackTrace();
         }
 
+        refreshFiles();
         // 2. Create a new window that takes as input those users
     }
 
@@ -112,20 +118,44 @@ public class MainController extends BaseController {
             Future<String> downloadRightResponse = downloadRightExecutorService.submit(downloadRightCommand);
 
             try {
-                if (downloadRightResponse.get().equals("Success")) {
+                if (!downloadRightResponse.get().equals("Failed")) {
+                    boolean writable = false;
+                    boolean downloadable = false;
 
-                    Path path = Paths.get(saveFileLocation.toURI());
-                    Files.write(path, files.get(selectedFileIdToDownload));
+                    String[] userRights = downloadRightResponse.get().split(",");
 
-                    ExecutorService es = Executors.newCachedThreadPool();
-                    ClientSocket commandWithSocket = new ClientSocket("localhost", 9001, buildCommand(buildCommand("download", username), selectedFileIdToDownload));
+                    for (String right :
+                            userRights) {
+                        if (right.equals("D")) {
+                            downloadable = true;
+                        }
+                        if (right.equals("U")) {
+                            writable = true;
+                        }
+                    }
 
-                    Future<String> response = es.submit(commandWithSocket);
+                    if (downloadable) {
+                        Path path = Paths.get(saveFileLocation.toURI());
+                        Files.write(path, files.get(selectedFileIdToDownload));
+                        File savedFile = new File(path.toUri());
 
-                    try {
-                        interpretResponseFromServer(response.get());
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
+                        if (savedFile.exists()) {
+                            savedFile.setWritable(writable);
+                        }
+
+                        ExecutorService es = Executors.newCachedThreadPool();
+                        ClientSocket commandWithSocket = new ClientSocket("localhost", 9001, buildCommand(buildCommand("download", username), selectedFileIdToDownload));
+
+                        Future<String> response = es.submit(commandWithSocket);
+
+                        try {
+                            interpretResponseFromServer(response.get());
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else {
+                        showInformationMessage("No right to download!");
                     }
                 }
                 else {
@@ -152,5 +182,31 @@ public class MainController extends BaseController {
         }
         ObservableList<String> itemsForDisplay = FXCollections.observableArrayList(new ArrayList<>(files.keySet()));
         fileListView.setItems(itemsForDisplay);
+    }
+
+    public void onEditButtonClick(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/editFile.fxml"));
+        Stage stage = new Stage();
+        stage.setTitle(ProjectConstants.APPLICATION_NAME + " - Edit File");
+        stage.setScene(new Scene(loader.load()));
+        EditFileController controller = loader.getController();
+        controller.initData(fileListView.getSelectionModel().getSelectedItem(), files.get(fileListView.getSelectionModel().getSelectedItem()));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+
+        refreshFiles();
+    }
+
+    public void refreshFiles() {
+        ExecutorService es = Executors.newCachedThreadPool();
+        ClientSocket commandWithSocket = new ClientSocket("localhost", 9001, buildCommand("refresh", username));
+
+        Future<String> response = es.submit(commandWithSocket);
+
+        try {
+            interpretResponseFromServer(response.get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 }

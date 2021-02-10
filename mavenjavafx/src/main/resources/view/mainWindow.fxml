@@ -14,4 +14,5 @@
    <Button fx:id="downloadButton" layoutX="497.0" layoutY="320.0" mnemonicParsing="false" onAction="#onDownloadButtonClick" text="Download" />
    <Label layoutX="442.0" layoutY="293.0" text="Selected file operations" />
    <Label layoutX="37.0" layoutY="58.0" text="Here are the files that you have acces to:" />
+   <Button fx:id="editButton" layoutX="393.0" layoutY="320.0" mnemonicParsing="false" onAction="#onEditButtonClick" text="Edit" />
 </AnchorPane>

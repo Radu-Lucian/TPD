@@ -21,7 +21,7 @@ public class Right {
     @Enumerated(EnumType.STRING)
     private RightType type;
 
-    @ManyToMany(mappedBy = "rights", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "rights", cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
     public RightType getType() {

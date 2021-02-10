@@ -49,17 +49,24 @@ public class DownloadRightAction extends ControllerBaseAction{
     }
 
     private String checkDownloadRight(User resultedUser, String downloadedFileId) {
+        StringBuilder stringBuilder = new StringBuilder();
         for (UserRole userRole:
              resultedUser.getRoles()) {
             if (userRole.getRole().getResource().getId() == Integer.parseInt(downloadedFileId)) {
                 for (Right right:
                      userRole.getRole().getRights()) {
                     if (right.getType() == RightType.DOWNLOAD) {
-                        return "Success";
+                        stringBuilder.append("D").append(",");
+                    }
+                    if (right.getType() == RightType.UPDATE) {
+                        stringBuilder.append("U").append(",");
                     }
                 }
             }
         }
-        return "Failed";
+        if (stringBuilder.toString().isEmpty()) {
+            return "Failed";
+        }
+        return stringBuilder.toString();
     }
 }

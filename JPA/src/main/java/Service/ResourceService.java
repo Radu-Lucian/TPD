@@ -25,4 +25,8 @@ public class ResourceService {
     public Resource findById(int id){
         return resourceDao.find(id);
     }
+
+    public void updateFile(Resource resourceToUpdate) {
+        resourceDao.update(resourceToUpdate);
+    }
 }

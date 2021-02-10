@@ -27,7 +27,7 @@ public class Resource {
     @Column(name = "file")
     private byte[] file;
 
-    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
     public byte[] getFile() {
