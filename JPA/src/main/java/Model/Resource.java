@@ -10,8 +10,9 @@ import java.util.Set;
 @Table(name = "resources")
 public class Resource {
 
-    public Resource(byte[] file) {
+    public Resource(byte[] file, boolean cypher) {
         this.file = file;
+        this.cypher = cypher;
     }
 
     public Resource() {
@@ -26,6 +27,9 @@ public class Resource {
     @Lob
     @Column(name = "file")
     private byte[] file;
+
+    @Column(name = "cypher", nullable = false)
+    private boolean cypher;
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
@@ -52,6 +56,14 @@ public class Resource {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isCypher() {
+        return cypher;
+    }
+
+    public void setCypher(boolean cypher) {
+        this.cypher = cypher;
     }
 
     @Override

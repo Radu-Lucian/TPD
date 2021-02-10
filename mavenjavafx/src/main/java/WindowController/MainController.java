@@ -1,6 +1,7 @@
 package WindowController;
 
 import Client.ClientSocket;
+import Utils.Encryption;
 import Utils.ProjectConstants;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -54,6 +55,8 @@ public class MainController extends BaseController {
 
     private HashMap<String, byte[]> files = new HashMap<String, byte[]>();
 
+    private HashMap<String, String> fileIdAndCypher = new HashMap<String, String>();
+
     @FXML
     void initialize() {
         downloadButton.disableProperty().bind(Bindings.isEmpty(fileListView.getSelectionModel().getSelectedItems()));
@@ -82,7 +85,7 @@ public class MainController extends BaseController {
             stage.setScene(new Scene(loader.load()));
             UploadFileController controller = loader.getController();
             controller.initData(username, allUsers);
-            stage.show();
+            stage.showAndWait();
 
         } catch (InterruptedException | ExecutionException | IOException e) {
             e.printStackTrace();
@@ -178,23 +181,47 @@ public class MainController extends BaseController {
 
         for (int i = 1; i < responses.length; i++) {
             String[] idAndFile = responses[i].split(":");
-            files.put(idAndFile[0], base64Decoder.decode(idAndFile[1].getBytes(StandardCharsets.ISO_8859_1)));
+            String[] idAndCypher = idAndFile[0].split(",");
+
+            files.put(idAndCypher[0], Encryption.decode(idAndFile[1], idAndCypher[1]));
+            fileIdAndCypher.put(idAndCypher[0], idAndCypher[1]);
         }
         ObservableList<String> itemsForDisplay = FXCollections.observableArrayList(new ArrayList<>(files.keySet()));
         fileListView.setItems(itemsForDisplay);
     }
 
-    public void onEditButtonClick(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/editFile.fxml"));
-        Stage stage = new Stage();
-        stage.setTitle(ProjectConstants.APPLICATION_NAME + " - Edit File");
-        stage.setScene(new Scene(loader.load()));
-        EditFileController controller = loader.getController();
-        controller.initData(fileListView.getSelectionModel().getSelectedItem(), files.get(fileListView.getSelectionModel().getSelectedItem()));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
+    public void onEditButtonClick(ActionEvent event) throws IOException, ExecutionException, InterruptedException {
+        ExecutorService downloadRightExecutorService = Executors.newCachedThreadPool();
+        ClientSocket downloadRightCommand = new ClientSocket("localhost", 9001, buildCommand(buildCommand("downloadRight", username), fileListView.getSelectionModel().getSelectedItem()));
 
-        refreshFiles();
+        Future<String> downloadRightResponse = downloadRightExecutorService.submit(downloadRightCommand);
+
+        if (!downloadRightResponse.get().equals("Failed")) {
+            boolean canEdit = false;
+            String[] userRights = downloadRightResponse.get().split(",");
+
+            for (String right :
+                    userRights) {
+                if (right.equals("U")) {
+                    canEdit = true;
+                }
+            }
+
+            if (canEdit) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/editFile.fxml"));
+                Stage stage = new Stage();
+                stage.setTitle(ProjectConstants.APPLICATION_NAME + " - Edit File");
+                stage.setScene(new Scene(loader.load()));
+                EditFileController controller = loader.getController();
+                controller.initData(fileListView.getSelectionModel().getSelectedItem(), files.get(fileListView.getSelectionModel().getSelectedItem()), fileIdAndCypher.get(fileListView.getSelectionModel().getSelectedItem()));
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.showAndWait();
+
+                refreshFiles();
+            } else {
+                operationFailedShowMessageBox("You don't have permission to edit the file");
+            }
+        }
     }
 
     public void refreshFiles() {

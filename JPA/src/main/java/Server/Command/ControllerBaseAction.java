@@ -33,8 +33,9 @@ public abstract class ControllerBaseAction implements ControllerAction {
             if (!role.getDownloaded()) {
                 byte[] file = role.getRole().getResource().getFile();
                 int fileId = role.getRole().getResource().getId();
+                boolean cypherType = role.getRole().getResource().isCypher();
                 String fileString = new String(file, StandardCharsets.ISO_8859_1);
-                userFiles.append(fileId).append(":").append(fileString).append(" ");
+                userFiles.append(fileId).append(",").append(cypherType).append(":").append(fileString).append(" ");
             }
         }
         return String.valueOf(userFiles);

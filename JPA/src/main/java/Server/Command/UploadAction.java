@@ -24,7 +24,9 @@ public class UploadAction extends ControllerBaseAction {
 
             String fileToUpload = this.bufferedInputReader.readLine();
             if (fileToUpload != null) {
-                Resource resource = addFileToDataBase(fileToUpload);
+                String[] fileAndEncryptionAlg = fileToUpload.split(":");
+
+                Resource resource = addFileToDataBase(fileAndEncryptionAlg[0], fileAndEncryptionAlg[1]);
                 respondClientOk();
 
                 String uploadingUserString = this.bufferedInputReader.readLine();
@@ -63,11 +65,15 @@ public class UploadAction extends ControllerBaseAction {
         return roleToAdd;
     }
 
-    private Resource addFileToDataBase(String fileToUpload) {
+    private Resource addFileToDataBase(String fileToUpload, String encryptAlg) {
         byte[] result = fileToUpload.getBytes(StandardCharsets.ISO_8859_1);
+        boolean encryptingAlg = false;
 
         ResourceService service = new ResourceService();
-        Resource resourceToAdd = new Resource(result);
+        if (!encryptAlg.equals("Base64")) {
+            encryptingAlg = true;
+        }
+        Resource resourceToAdd = new Resource(result, encryptingAlg);
         service.addFile(resourceToAdd);
 
         return resourceToAdd;

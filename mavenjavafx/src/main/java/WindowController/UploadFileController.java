@@ -1,6 +1,7 @@
 package WindowController;
 
 import Client.ClientSocket;
+import Utils.Encryption;
 import Utils.Member;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -47,6 +48,8 @@ public class UploadFileController extends BaseController {
     private String username;
 
     private String fileToUpload;
+
+    private String encryptionAlgorithm;
 
     private HashMap<String, String> users = new HashMap<String, String>();
 
@@ -103,10 +106,11 @@ public class UploadFileController extends BaseController {
         usersTableView.getColumns().add(c3);
 
         algorithmDropBox.setItems(FXCollections.observableArrayList(
-                new String("Cypher"),
-                new String("Base64")
+                new String("Base64"),
+                new String("Cypher")
         ));
 
+        algorithmDropBox.getSelectionModel().selectFirst();
     }
 
     public void onSelectFileButtonClick(ActionEvent event) throws IOException {
@@ -120,6 +124,8 @@ public class UploadFileController extends BaseController {
             Base64.Encoder base64Encoder = Base64.getUrlEncoder();
 
             fileToUpload = new String(base64Encoder.encode(byteFile), StandardCharsets.ISO_8859_1);
+            fileToUpload = Encryption.encode(byteFile, algorithmDropBox.getSelectionModel().getSelectedItem());
+            encryptionAlgorithm = algorithmDropBox.getSelectionModel().getSelectedItem();
 
             fileStatusLabel.setText(fileToUploadFile.getName() + " loaded!");
         }
@@ -129,7 +135,7 @@ public class UploadFileController extends BaseController {
         ObservableList<Member> selectedUsers = usersTableView.getSelectionModel().getSelectedItems();
 
         StringBuilder commandString = new StringBuilder();
-        commandString.append(fileToUpload).append(" ").append(username).append(" ");
+        commandString.append(fileToUpload).append(":").append(encryptionAlgorithm).append(" ").append(username).append(" ");
         if (!selectedUsers.isEmpty()) {
             for (Member selectedUser :
                     selectedUsers) {
