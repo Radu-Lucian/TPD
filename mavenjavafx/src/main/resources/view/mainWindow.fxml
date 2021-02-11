@@ -6,13 +6,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="374.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WindowController.MainController">
-    <Label layoutX="37.0" layoutY="31.0" text="Greetings" />
-    <Label fx:id="usernameLabel" layoutX="97.0" layoutY="31.0" />
-   <ListView fx:id="fileListView" layoutX="28.0" layoutY="75.0" prefHeight="200.0" prefWidth="540.0" />
-   <Button fx:id="uploadButton" layoutX="28.0" layoutY="320.0" mnemonicParsing="false" onAction="#onUploadButtonClick" text="Upload" />
-   <Button fx:id="viewButton" layoutX="442.0" layoutY="320.0" mnemonicParsing="false" onAction="#onViewButtonClick" text="View" />
-   <Button fx:id="downloadButton" layoutX="497.0" layoutY="320.0" mnemonicParsing="false" onAction="#onDownloadButtonClick" text="Download" />
-   <Label layoutX="442.0" layoutY="293.0" text="Selected file operations" />
-   <Label layoutX="37.0" layoutY="58.0" text="Here are the files that you have acces to:" />
-   <Button fx:id="editButton" layoutX="393.0" layoutY="320.0" mnemonicParsing="false" onAction="#onEditButtonClick" text="Edit" />
+    <Label layoutX="37.0" layoutY="31.0" text="Greetings" AnchorPane.leftAnchor="37.0" AnchorPane.topAnchor="31.0" />
+    <Label fx:id="usernameLabel" layoutX="97.0" layoutY="31.0" AnchorPane.leftAnchor="97.0" AnchorPane.topAnchor="31.0" />
+   <ListView fx:id="fileListView" layoutX="28.0" layoutY="75.0" prefHeight="200.0" prefWidth="540.0" AnchorPane.bottomAnchor="99.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="32.0" AnchorPane.topAnchor="75.0" />
+   <Button fx:id="uploadButton" layoutX="28.0" layoutY="320.0" mnemonicParsing="false" onAction="#onUploadButtonClick" text="Upload" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="28.0" />
+   <Button fx:id="viewButton" layoutX="442.0" layoutY="320.0" mnemonicParsing="false" onAction="#onViewButtonClick" text="View" AnchorPane.bottomAnchor="29.0" AnchorPane.rightAnchor="116.0" />
+   <Button fx:id="downloadButton" layoutX="497.0" layoutY="320.0" mnemonicParsing="false" onAction="#onDownloadButtonClick" text="Download" AnchorPane.bottomAnchor="29.0" AnchorPane.rightAnchor="32.0" />
+   <Label layoutX="442.0" layoutY="293.0" text="Selected file operations" AnchorPane.bottomAnchor="64.0" AnchorPane.rightAnchor="34.0" />
+   <Label layoutX="37.0" layoutY="58.0" text="Here are the files that you have acces to:" AnchorPane.leftAnchor="37.0" AnchorPane.topAnchor="58.0" />
+   <Button fx:id="editButton" layoutX="393.0" layoutY="320.0" mnemonicParsing="false" onAction="#onEditButtonClick" text="Edit" AnchorPane.bottomAnchor="29.0" AnchorPane.rightAnchor="170.0" />
 </AnchorPane>

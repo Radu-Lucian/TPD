@@ -172,8 +172,6 @@ public class MainController extends BaseController {
 
     private void interpretResponseFromServer(String response) {
         files.clear();
-        Base64.Decoder base64Decoder = Base64.getUrlDecoder();
-
         String[] responses = response.split("\\s+");
 
         this.username = responses[0];

@@ -5,11 +5,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="325.0" prefWidth="483.0" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="WindowController.RegisterController">
-    <TextField fx:id="usernameField" layoutX="167.0" layoutY="152.0"/>
-    <Button fx:id="registerButton" layoutX="167.0" layoutY="202.0" mnemonicParsing="false" text="Register" onAction="#onRegisterButtonClick"/>
-    <Button fx:id="cancelButton" layoutX="264.0" layoutY="202.0" mnemonicParsing="false" text="Cancel" onAction="#onCancelButtonClick"/>
-    <Label layoutX="196.0" layoutY="116.0" text="Enter a username"/>
+<AnchorPane prefHeight="325.0" prefWidth="483.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WindowController.RegisterController">
+    <TextField fx:id="usernameField" layoutX="167.0" layoutY="152.0" AnchorPane.leftAnchor="167.0" AnchorPane.topAnchor="152.0" />
+    <Button fx:id="registerButton" layoutX="167.0" layoutY="202.0" mnemonicParsing="false" onAction="#onRegisterButtonClick" text="Register" AnchorPane.bottomAnchor="98.0" AnchorPane.leftAnchor="167.0" />
+    <Button fx:id="cancelButton" layoutX="264.0" layoutY="202.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" AnchorPane.bottomAnchor="98.0" AnchorPane.rightAnchor="167.0" />
+    <Label layoutX="196.0" layoutY="116.0" text="Enter a username" AnchorPane.leftAnchor="196.0" AnchorPane.topAnchor="116.0" />
 </AnchorPane>

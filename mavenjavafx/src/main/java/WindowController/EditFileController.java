@@ -63,7 +63,7 @@ public class EditFileController extends BaseController {
         byte[] textByte = textArea.getText().getBytes();
         String cypherType;
 
-        if (cypher.equals("False")) {
+        if (cypher.equals("false")) {
             cypherType = "Base64";
         } else {
             cypherType = "Cypher";

@@ -9,18 +9,18 @@
 
 <AnchorPane prefHeight="419.0" prefWidth="373.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WindowController.UploadFileController">
    <children>
-      <Button fx:id="selectFileButton" layoutX="30.0" layoutY="340.0" mnemonicParsing="false" onAction="#onSelectFileButtonClick" text="Select file" />
-      <Button fx:id="uploadButton" layoutX="233.0" layoutY="340.0" mnemonicParsing="false" onAction="#onUploadButtonClick" text="Upload To Server" />
-      <Label layoutX="30.0" layoutY="88.0" text="Select users you want to give right" />
-      <Label layoutX="30.0" layoutY="47.0" text="File to upload:" />
-      <Label fx:id="fileStatusLabel" layoutX="121.0" layoutY="47.0" text="not loaded" />
-      <TableView fx:id="usersTableView" layoutX="29.0" layoutY="111.0" prefHeight="219.0" prefWidth="308.0">
+      <Button fx:id="selectFileButton" layoutX="30.0" layoutY="340.0" mnemonicParsing="false" onAction="#onSelectFileButtonClick" text="Select file" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="30.0" />
+      <Button fx:id="uploadButton" layoutX="233.0" layoutY="340.0" mnemonicParsing="false" onAction="#onUploadButtonClick" text="Upload To Server" AnchorPane.bottomAnchor="54.0" AnchorPane.rightAnchor="32.0" />
+      <Label layoutX="30.0" layoutY="88.0" text="Select users you want to give right" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="88.0" />
+      <Label layoutX="30.0" layoutY="47.0" text="File to upload:" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="47.0" />
+      <Label fx:id="fileStatusLabel" layoutX="121.0" layoutY="47.0" text="not loaded" AnchorPane.leftAnchor="121.0" AnchorPane.topAnchor="47.0" />
+      <TableView fx:id="usersTableView" layoutX="29.0" layoutY="111.0" prefHeight="219.0" prefWidth="308.0" AnchorPane.bottomAnchor="89.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="36.0" AnchorPane.topAnchor="111.0">
         <columns>
           <TableColumn prefWidth="75.0" text="C1" />
           <TableColumn prefWidth="75.0" text="C2" />
         </columns>
       </TableView>
-      <ComboBox fx:id="algorithmDropBox" layoutX="228.0" layoutY="380.0" prefHeight="25.0" prefWidth="119.0" />
-      <Label layoutX="121.0" layoutY="384.0" text="Crypting algorithm" />
+      <ComboBox fx:id="algorithmDropBox" layoutX="228.0" layoutY="380.0" prefHeight="25.0" prefWidth="119.0" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="26.0" />
+      <Label layoutX="121.0" layoutY="384.0" text="Crypting algorithm" AnchorPane.bottomAnchor="18.0" AnchorPane.rightAnchor="152.0" />
    </children>
 </AnchorPane>
